@@ -1,0 +1,10 @@
+---
+ - name: create ami for existing instance
+   ec2_ami:
+      instance_id: "{{instanceid}}"
+      wait: yes
+      name: ansible ami
+      tags:
+        Name: newtest
+        Service: TestService
+   register: image

@@ -5,5 +5,3 @@ instancetype: t2.micro
 amiid: ami-0beaa649c482330f7
 subnetid: subnet-0be5eb028e4645279
 region: us-east-2
-accesskey: ******
-secretkey: *******
