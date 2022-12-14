@@ -1,0 +1,37 @@
+---
+ - name: create_ec2
+   ec2:
+     key_name: "{{ keyname }}"
+     instance_type: "{{instancetype}}"
+     image: "{{amiid}}"
+     wait: yes
+     count: 2
+     vpc_subnet_id: "{{subnetid}}"
+     assign_public_ip: yes
+     region: "{{ region }}"
+     aws_access_key: "{{ accesskey }}"
+     aws_secret_key: "{{ secretkey }}"
+   register: ec2_output
+
+ - name: gather instance facts
+   ec2_vol_info:
+     region: "{{ usregion }}"
+   register: vol_output
+
+ - name: Debug statement
+   debug:
+     msg: "{{ vol_output }}"
+ 
+ - name: get instance list to add tags
+   set_fact:
+     instancelist: "{{vol_output.volumes | map(attribute='id') | list }}"
+
+ - name: Ensure volume tags are present on a resource
+   ec2_tag:
+    region: "{{ usregion }}"
+    resource: "{{ item }}"
+    state: present
+    tags:
+      Name: ebs
+      env: pre-prod
+   with_items: "{{ instancelist }}"

@@ -1,0 +1,9 @@
+---
+keyname: myfirstkeypair
+instancetype: t2.micro
+amiid: ami-0beaa649c482330f7
+subnetid: subnet-0be5eb028e4645279
+region: us-east-2
+usregion: us-east-2
+accesskey: AKIAUE7GVNDEJCL3Y6ID
+secretkey: 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
