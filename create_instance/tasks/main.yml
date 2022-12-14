@@ -1,0 +1,33 @@
+---
+ - name: create_ec2
+   ec2:
+     key_name: "{{ keyname }}"
+     instance_type: "{{instancetype}}"
+     image: "{{amiid}}"
+     wait: yes
+     count: 3
+     vpc_subnet_id: "{{subnetid}}"
+     assign_public_ip: yes
+     region: "{{ region }}"
+     aws_access_key: "{{ accesskey }}"
+     aws_secret_key: "{{ secretkey }}"
+   register: ec2_output
+
+ - name:  Debug statement
+   debug:
+     msg: "{{ ec2_output }}"
+
+ - name: get instance id
+   set_fact:
+     ec2_id: "{{ec2_output.instances | map(attribute='id') | list}}"
+ - name: Ensure tags are present on a resource
+   ec2_tag:
+    region: "{{ region }}"
+    resource: "{{item}}"
+    state: present
+    aws_access_key: "{{ accesskey }}"
+    aws_secret_key: "{{ secretkey }}"
+    tags:
+      Name: vol
+      env: prod
+   with_items: "{{ec2_id}}"
